@@ -16,6 +16,19 @@
         @endif
     </head>
     <body>
-        {{ $slot }}
+        <header>
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/posts">Publication List</a>
+                </li>
+            </ul>
+        </header>
+        <main>
+            {{ $slot }}
+        </main>
+        <footer>Footer</footer>
     </body>
 </html>
