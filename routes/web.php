@@ -7,5 +7,16 @@ Route::get('/', function () {
 });
 
 Route::get('/posts', function () {
-    return view('posts.index');
+    $posts = DB::select('select * from posts');
+    return view('posts.index', ['posts' => $posts]);
+});
+
+Route::get('/posts/{id}', function (string $id) {
+    $post = DB::selectOne('select * from posts where id = ?', [$id]);
+
+    if ($post == null) {
+        abort(404);
+    }
+
+    return view('posts.show', ['post' => $post]);
 });
