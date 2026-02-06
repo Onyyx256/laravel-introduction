@@ -22,7 +22,7 @@
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="/posts">Publication List</a>
+                    <a href="/posts">Posts List</a>
                 </li>
             </ul>
         </header>
