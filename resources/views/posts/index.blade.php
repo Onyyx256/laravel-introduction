@@ -16,7 +16,7 @@
         @endif
     </head>
     <body>
-        <h1>Hello world</h1>
-        <a href="/posts">Publications List</a>
+        <h1>Publications List</h1>
+        <a href="/">Home</a>
     </body>
 </html>
