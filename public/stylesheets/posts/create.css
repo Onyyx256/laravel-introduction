@@ -1,0 +1,27 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+form div input,
+form div textarea {
+    border: 1px solid gray;
+    border-radius: 2px;
+    padding: 8px;
+}
+
+form div input.is-invalid,
+form div input textarea.is-invalid {
+    border-color: red;
+}
+
+form div .error-message {
+    color: red;
+}

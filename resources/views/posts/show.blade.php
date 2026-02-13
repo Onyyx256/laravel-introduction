@@ -1,4 +1,8 @@
 <x-layout>
     <h1>{{ $post->title }}</h1>
-    <p>{{ $post->description }}</p>
+    @if($post -> description)
+        <p>{{ $post->description }}</p>
+    @else
+        <p>no description...</p>
+    @endif
 </x-layout>
