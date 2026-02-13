@@ -1,8 +1,10 @@
 <x-layout>
     <h1>{{ $post->title }}</h1>
-    @if($post -> description)
-        <p>{{ $post->description }}</p>
-    @else
-        <p>no description...</p>
-    @endif
+    <p>{{ $post->description ?? "No description..." }}</p>
+    <form method="POST" action="/posts/{{ $post->id }}">
+        @method('DELETE')
+        @csrf
+
+        <button>Delete</button>
+    </form>
 </x-layout>
