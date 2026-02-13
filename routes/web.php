@@ -1,15 +1,15 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/posts', function () {
-    $posts = DB::select('select * from posts');
+    $posts = Post::all();
     return view('posts.index', ['posts' => $posts]);
 });
 
@@ -19,48 +19,35 @@ Route::post('/posts', function (Request $request) {
         'description' => 'nullable|min:10'
     ]);
 
-    DB::insert("INSERT INTO posts (title, description) VALUES (?, ?)", [$validated['title'], $validated['description']]);
+    Post::query()->create($validated);
 
     return redirect("/posts");
 });
 
-Route::get("/posts/{id}", function (int $id) {
-    $post = DB::selectOne('SELECT * from posts where id = ?', [$id]);
-
-    if ($post == null) {
-        abort(404);
-    }
-
+Route::get("/posts/{post}", function (Post $post) {
     return view('posts.show', ['post' => $post]);
-})->whereNumber('id');
+});
 
-Route::put('/posts/{id}', function (Request $request, int $id) {
+Route::put('/posts/{post}', function (Request $request, Post $post) {
     $validated = $request->validate([
         'title' => 'required|max:255',
         'description' => 'nullable|min:10'
     ]);
 
-    $post = DB::selectOne('SELECT * FROM posts WHERE id = ?', [$id]);
+   $post->update($validated);
 
-    if ($post == null) {
-        abort(404);
-    }
+    return redirect("/posts/$post->id");
+});
 
-    DB::update("UPDATE posts SET title = ?, description = ? WHERE id = ?", [$validated['title'], $validated['description'], $id]);
-
-    return redirect("/posts/$id");
-})->whereNumber("id");
-
-Route::delete("/posts/{id}", function (int $id) {
-    DB::delete("DELETE FROM posts WHERE id = ?", [$id]);
+Route::delete("/posts/{post}", function (Post $post) {
+    $post->delete();
     return redirect("/posts");
-})->whereNumber("id");
+});
 
 Route::get("/posts/create", function () {
     return view("posts.create");
 });
 
-Route::get("/posts/{id}/edit", function (int $id) {
-    $post = DB::selectOne("SELECT * FROM posts WHERE id = ?", [$id]);
+Route::get("/posts/{post}/edit", function (Post $post) {
     return view("posts.edit", ["post" => $post]);
 });
