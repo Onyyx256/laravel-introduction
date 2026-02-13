@@ -18,7 +18,7 @@ form div textarea {
 }
 
 form div input.is-invalid,
-form div input textarea.is-invalid {
+form div textarea.is-invalid {
     border-color: red;
 }
 
