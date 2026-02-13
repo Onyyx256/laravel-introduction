@@ -21,11 +21,11 @@ Route::post('/posts', function (Request $request) {
 
     DB::insert("INSERT INTO posts (title, description) VALUES (?, ?)", [$validated['title'], $validated['description']]);
 
-    return redirect('/posts');
+    return redirect("/posts");
 });
 
-Route::get('/posts/{id}', function (string $id) {
-    $post = DB::selectOne('select * from posts where id = ?', [$id]);
+Route::get("/posts/{id}", function (int $id) {
+    $post = DB::selectOne('SELECT * from posts where id = ?', [$id]);
 
     if ($post == null) {
         abort(404);
@@ -34,11 +34,33 @@ Route::get('/posts/{id}', function (string $id) {
     return view('posts.show', ['post' => $post]);
 })->whereNumber('id');
 
-Route::delete('/posts/{id}', function ($id) {
-    DB::delete('DELETE FROM posts WHERE id = ?', [$id]);
-    return redirect('/posts');
-})->whereNumber('id');
+Route::put('/posts/{id}', function (Request $request, int $id) {
+    $validated = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'nullable|min:10'
+    ]);
 
-Route::get('/posts/create', function () {
-    return view('posts.create');
+    $post = DB::selectOne('SELECT * FROM posts WHERE id = ?', [$id]);
+
+    if ($post == null) {
+        abort(404);
+    }
+
+    DB::update("UPDATE posts SET title = ?, description = ? WHERE id = ?", [$validated['title'], $validated['description'], $id]);
+
+    return redirect("/posts/$id");
+})->whereNumber("id");
+
+Route::delete("/posts/{id}", function (int $id) {
+    DB::delete("DELETE FROM posts WHERE id = ?", [$id]);
+    return redirect("/posts");
+})->whereNumber("id");
+
+Route::get("/posts/create", function () {
+    return view("posts.create");
+});
+
+Route::get("/posts/{id}/edit", function (int $id) {
+    $post = DB::selectOne("SELECT * FROM posts WHERE id = ?", [$id]);
+    return view("posts.edit", ["post" => $post]);
 });

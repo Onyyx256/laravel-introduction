@@ -7,4 +7,5 @@
 
         <button>Delete</button>
     </form>
+    <a href="/posts/{{ $post->id }}/edit">Edit</a>
 </x-layout>
