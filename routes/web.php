@@ -1,53 +1,25 @@
 <?php
 
-use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/posts', function () {
-    $posts = Post::all();
-    return view('posts.index', ['posts' => $posts]);
-});
+// when you wanna manipulate a table and have all possible data of a table
+Route::resource('posts', PostController::class);
 
-Route::post('/posts', function (Request $request) {
-    $validated = $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'nullable|min:10'
-    ]);
-
-    Post::query()->create($validated);
-
-    return redirect("/posts");
-});
-
-Route::get("/posts/{post}", function (Post $post) {
-    return view('posts.show', ['post' => $post]);
-});
-
-Route::put('/posts/{post}', function (Request $request, Post $post) {
-    $validated = $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'nullable|min:10'
-    ]);
-
-   $post->update($validated);
-
-    return redirect("/posts/$post->id");
-});
-
-Route::delete("/posts/{post}", function (Post $post) {
-    $post->delete();
-    return redirect("/posts");
-});
-
-Route::get("/posts/create", function () {
-    return view("posts.create");
-});
-
-Route::get("/posts/{post}/edit", function (Post $post) {
-    return view("posts.edit", ["post" => $post]);
-});
+//Route::get('/posts', [PostController::class, "index"]);
+//
+//Route::post('/posts', [PostController::class, "store"]);
+//
+//Route::get("/posts/{post}", [PostController::class, "show"]);
+//
+//Route::put('/posts/{post}', [PostController::class, "update"]);
+//
+//Route::delete("/posts/{post}", [PostController::class, "destroy"]);
+//
+//Route::get("/posts/create", [PostController::class, "create"]);
+//
+//Route::get("/posts/{post}/edit", [PostController::class, "edit"]);
